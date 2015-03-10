@@ -3,13 +3,16 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2014/11 | Yu&#39;s Blog</title>
+  <title>Swift中如何优雅处理Http和JSON | Yu&#39;s Blog</title>
   <meta name="author" content="Yu Qiao">
+  
+  <meta name="description" content="如今的iOS App，很少没有用到Http和JSON的，而在这一方面，iOS内建机制并不是很好用，尤其是使用swift进行开发时，处理方式并不优雅。我推荐两个开源解决方案：使用Alamofire + swfit-json
+Alamofire是一个很著名HTTP解决方案，在github上的star已经">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  
+  <meta property="og:title" content="Swift中如何优雅处理Http和JSON"/>
   <meta property="og:site_name" content="Yu&#39;s Blog"/>
 
   
@@ -50,25 +53,57 @@
   <div class="clearfix"></div>
 </div></header>
   <div id="content" class="inner">
-    <div id="main-col" class="alignleft"><div id="wrapper">
-<h2 class="archive-title">2014/11</h2>
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+      
+        <div class="icon"></div>
+        <time datetime="2015-02-15T02:06:49.000Z"><a href="/2015/02/15/Swift中如何优雅处理Http和JSON/">Feb 15 2015</a></time>
+      
+      
+  
+    <h1 class="title">Swift中如何优雅处理Http和JSON</h1>
+  
 
+      
+    </header>
+    <div class="entry">
+      
+        
+          
+        
+        <p>如今的iOS App，很少没有用到Http和JSON的，而在这一方面，iOS内建机制并不是很好用，尤其是使用swift进行开发时，处理方式并不优雅。我推荐两个开源解决方案：使用<a href="https://github.com/Alamofire/Alamofire" target="_blank" rel="external">Alamofire</a> + <a href="https://github.com/dankogai/swift-json" target="_blank" rel="external">swfit-json</a></p>
+<p>Alamofire是一个很著名HTTP解决方案，在github上的star已经超过7000。安装之后，就可以优雅地进行Http请求了：</p>
+<pre><code>    import Alamofire
 
-  <div class="archive">
-    
-      <article class="post">
-        <div class="post-content">
-          <header>
-            <div class="icon"></div>
-            <time datetime="2014-11-01T21:32:20.000Z"><a href="/2014/11/02/How-to-make-your-existing-app-compatible-to-iPhone-6-and-iPhone-6-Plus/">Nov 2 2014</a></time>
-            
-              <h1 class="title"><a href="/2014/11/02/How-to-make-your-existing-app-compatible-to-iPhone-6-and-iPhone-6-Plus/">How to make your existing app compatible to iPhone 6 and iPhone 6 Plus</a></h1>
-            
-          </header>
-        </div>
-      </article>
-    
+    Alamofire.<span class="built_in">request</span>(.<span class="keyword">GET</span>, <span class="string">"http://httpbin.org/get"</span>)
+</code></pre><p>其他的详细文档可以去Github上去查阅，十分方便。</p>
+<p>swift-json使我们方便地用swift处理JSON数据，另一个比较著名的同类解决方案是<a href="https://github.com/lingoer/SwiftyJSON" target="_blank" rel="external">SwiftJSON</a>，我个人而言还是倾向于使用swift-josn。</p>
+<p>为什么要使用这个库呢？在swift中处理JSON是一件很麻烦的事情，熟悉swift的同学都知道，在swift中，为了安全起见，我们在读optional的数据前，会检查其是否为nil，因此，如果你的JSON数据结构稍微复杂一点，你需要加很多层级的检查，十分不优雅，而使用这中库之后，处理起来就很方便了。</p>
+
+      
+    </div>
+    <footer>
+      
+      
+  
+  <div class="tags">
+    <a href="/tags/iOS-Http-JSON/">iOS Http JSON</a>
   </div>
+
+      
+        <div class="alignright share-box">
+  
+</div>
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
 </div></div>
     <aside id="sidebar" class="alignright">
   
