@@ -6,8 +6,7 @@
   <title>Swift中如何优雅处理Http和JSON | Yu&#39;s Blog</title>
   <meta name="author" content="Yu Qiao">
   
-  <meta name="description" content="如今的iOS App，很少没有用到Http和JSON的，而在这一方面，iOS内建机制并不是很好用，尤其是使用swift进行开发时，处理方式并不优雅。我推荐两个开源解决方案：使用Alamofire + swfit-json
-Alamofire是一个很著名HTTP解决方案，在github上的star已经">
+  <meta name="description" content="如今的iOS App，很少没有用到Http和JSON的，而在这一方面，iOS内建机制并不是很好用，尤其是使用swift进行开发时，处理方式并不优雅。我推荐两个开源解决方案：使用Alamofire + swfit-json">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -74,8 +73,7 @@ Alamofire是一个很著名HTTP解决方案，在github上的star已经">
         
           
         
-        <p>如今的iOS App，很少没有用到Http和JSON的，而在这一方面，iOS内建机制并不是很好用，尤其是使用swift进行开发时，处理方式并不优雅。我推荐两个开源解决方案：使用<a href="https://github.com/Alamofire/Alamofire" target="_blank" rel="external">Alamofire</a> + <a href="https://github.com/dankogai/swift-json" target="_blank" rel="external">swfit-json</a></p>
-<p>Alamofire是一个很著名HTTP解决方案，在github上的star已经超过7000。安装之后，就可以优雅地进行Http请求了：</p>
+        <p>如今的iOS App，很少没有用到Http和JSON的，而在这一方面，iOS内建机制并不是很好用，尤其是使用swift进行开发时，处理方式并不优雅。我推荐两个开源解决方案：使用<a href="https://github.com/Alamofire/Alamofire" target="_blank" rel="external">Alamofire</a> + <a href="https://github.com/dankogai/swift-json" target="_blank" rel="external">swfit-json</a><br><a id="more"></a><br>Alamofire是一个很著名HTTP解决方案，在github上的star已经超过7000。安装之后，就可以优雅地进行Http请求了：</p>
 <pre><code>    import Alamofire
 
     Alamofire.<span class="built_in">request</span>(.<span class="keyword">GET</span>, <span class="string">"http://httpbin.org/get"</span>)

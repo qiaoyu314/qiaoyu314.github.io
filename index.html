@@ -69,16 +69,7 @@
     </header>
     <div class="entry">
       
-        
-        <p>如今的iOS App，很少没有用到Http和JSON的，而在这一方面，iOS内建机制并不是很好用，尤其是使用swift进行开发时，处理方式并不优雅。我推荐两个开源解决方案：使用<a href="https://github.com/Alamofire/Alamofire" target="_blank" rel="external">Alamofire</a> + <a href="https://github.com/dankogai/swift-json" target="_blank" rel="external">swfit-json</a></p>
-<p>Alamofire是一个很著名HTTP解决方案，在github上的star已经超过7000。安装之后，就可以优雅地进行Http请求了：</p>
-<pre><code>    import Alamofire
-
-    Alamofire.<span class="built_in">request</span>(.<span class="keyword">GET</span>, <span class="string">"http://httpbin.org/get"</span>)
-</code></pre><p>其他的详细文档可以去Github上去查阅，十分方便。</p>
-<p>swift-json使我们方便地用swift处理JSON数据，另一个比较著名的同类解决方案是<a href="https://github.com/lingoer/SwiftyJSON" target="_blank" rel="external">SwiftJSON</a>，我个人而言还是倾向于使用swift-josn。</p>
-<p>为什么要使用这个库呢？在swift中处理JSON是一件很麻烦的事情，熟悉swift的同学都知道，在swift中，为了安全起见，我们在读optional的数据前，会检查其是否为nil，因此，如果你的JSON数据结构稍微复杂一点，你需要加很多层级的检查，十分不优雅，而使用这中库之后，处理起来就很方便了。</p>
-
+        <p>如今的iOS App，很少没有用到Http和JSON的，而在这一方面，iOS内建机制并不是很好用，尤其是使用swift进行开发时，处理方式并不优雅。我推荐两个开源解决方案：使用<a href="https://github.com/Alamofire/Alamofire" target="_blank" rel="external">Alamofire</a> + <a href="https://github.com/dankogai/swift-json" target="_blank" rel="external">swfit-json</a><br>
       
     </div>
     <footer>
@@ -91,9 +82,9 @@
 
       
         
-          <div class="alignright share-box">
-  
-</div>
+          <div class="alignright">
+            <a href="/2015/02/15/Swift中如何优雅处理Http和JSON/" class="more-link">Read More</a>
+          </div>
         
       
       <div class="clearfix"></div>
