@@ -1,0 +1,246 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>What I learn from the souce code of Java HashMap | Yu&#39;s Blog</title>
+  <meta name="author" content="Yu Qiao">
+  
+  <meta name="description" content="Hash table related question is one of the most common interview questions for software engineer. You may be asked the simple question like “what is the time complexity of inserting a key-value pair”, or a very complex qeustion like “how do we design a hash table with these requirements …”. So, understanding the details of the hash table is very necessary. HashMap is the most commonly-used implementation of hash table in Java. I read the souce code of it. Here is what I learn from it.">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="What I learn from the souce code of Java HashMap"/>
+  <meta property="og:site_name" content="Yu&#39;s Blog"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="shortcut icon">
+  <link rel="alternate" href="/atom.xml" title="Yu&#39;s Blog" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+  
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-60902917-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div id="nav-top">
+  <div class="alignleft main-title">
+    <h1>Yu&#39;s Blog</h1>
+    <h2></h2>
+  </div>
+  <nav id="main-nav" class="alignright">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">Aboule Me</a></li>
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+      
+        <div class="icon"></div>
+        <time datetime="2015-04-05T13:30:18.000Z"><a href="/2015/04/05/What-I-learn-from-the-souce-code-of-Java-HashMap/">Apr 5 2015</a></time>
+      
+      
+  
+    <h1 class="title">What I learn from the souce code of Java HashMap</h1>
+  
+
+      
+    </header>
+    <div class="entry">
+      
+        
+          
+        
+        <p>Hash table related question is one of the most common interview questions for software engineer. You may be asked the simple question like “what is the time complexity of inserting a key-value pair”, or a very complex qeustion like “how do we design a hash table with these requirements …”. So, understanding the details of the hash table is very necessary. HashMap is the most commonly-used implementation of hash table in Java. I read the souce code of it. Here is what I learn from it. </p>
+<a id="more"></a>
+
+<p><strong>Basic Idea</strong></p>
+<p>We all know that the hash table is an array under the hood. When we insert a pair of key and value, we hash the key to a integer, which is the index of the array. And we place the value in the bucket. Looks very simple, but there are several problems we have to deal with. I pick up three key problems and we will take a look at how Java’s HahsMap solves those problems. </p>
+<p><strong>1. How to hash?</strong></p>
+<p>You may guess that we just need to use key.hashCode(). However, in the source code, the hash code is hashed again by a hash method:</p>
+<pre><code>int <span class="built_in">hash</span> = <span class="built_in">hash</span>(key.hashCode());
+</code></pre><p>Let’s take a look at what the hash method looks like:</p>
+<pre><code><span class="keyword">static</span> <span class="keyword">int</span> More ...hash(<span class="keyword">int</span> h) {
+    <span class="comment">// This function ensures that hashCodes that differ only by</span>
+    <span class="comment">// constant multiples at each bit position have a bounded</span>
+    <span class="comment">// number of collisions (approximately 8 at default load factor).</span>
+    h ^= (h &gt;&gt;&gt; <span class="number">20</span>) ^ (h &gt;&gt;&gt; <span class="number">12</span>);
+    <span class="keyword">return</span> h ^ (h &gt;&gt;&gt; <span class="number">7</span>) ^ (h &gt;&gt;&gt; <span class="number">4</span>);
+}
+</code></pre><p>Don’t know what is going on? Well, basically, this method helps us avoid collisions. Imagine the hash code of the key is not very good (evenly distributed), this method gives us the second chance to redo the hash process. That’s it.</p>
+<p>After we get the hash value, we need to find the bucket’s index:</p>
+<pre><code>static <span class="keyword">int</span> indexFor(<span class="keyword">int</span> h, <span class="keyword">int</span> <span class="built_in">length</span>){
+    <span class="keyword">return</span> h &amp; (<span class="built_in">length</span> - <span class="number">1</span>);
+}
+</code></pre><p>Because length always is power-of-two, length - 1 is always a number with all 1s. So the return value is always less than length.</p>
+<p><strong>2. How to deal with collision?</strong></p>
+<p>What if collision happens? If you learn hash table in class, you probably remember there are basically two methods: seprate chaining and open address. HashMap is using seprate chaining. Every pair of key-value is store in an Entry class:</p>
+<pre><code><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">More</span> ...<span class="title">Entry</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="inheritance"><span class="keyword">implements</span></span> <span class="title">Map</span>.<span class="title">Entry</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; </span>{
+    <span class="keyword">final</span> K key;
+    V value;
+    Entry&lt;K,V&gt; next;
+    <span class="keyword">final</span> <span class="keyword">int</span> hash;
+}
+</code></pre><p>As we can see, it has key and value. It also a pointer pointing to the next Entry, just like the linked list.</p>
+<p>When inserting a new Entry to a bucket and there is already an entry there, the new one will be in the bucket. Its Next is pointing to the old one.  </p>
+<p><strong>3. How to resize?</strong></p>
+<p>There are several key variables: loadFactor, size, threshold. loadFactor is a float number between 0 and 1. size is the number Entries that have been placed in the array. threshold = size * loadFactor. </p>
+<p>If size &gt;= threhold (this typically happnes when inserting new Entry), we want to enlarge the array to avoid collision. When resizing, Java initializes a new array which has doubles the size of the old one. Then iterate every entry in the old array, place them in the right slot of the new array.  </p>
+<p>Interestingly, I don’t find resize is used when removing Entries as I though shrinking the array would save more memory. Probably resizing in this case is not necessary since it’s time-consuming.   </p>
+
+      
+    </div>
+    <footer>
+      
+      
+  
+  <div class="tags">
+    <a href="/tags/Data-Structure/">Data Structure</a>
+  </div>
+
+      
+        <div class="alignright share-box">
+  
+</div>
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  
+<div class="widget tag">
+  <h3 class="title">Tags</h3>
+  <div class="entry">
+    
+      <span><a href="/tags/Data-Structure/">Data Structure<small>1</small></a></span>
+    
+      <span><a href="/tags/IOS/">IOS<small>1</small></a></span>
+    
+      <span><a href="/tags/UX/">UX<small>1</small></a></span>
+    
+      <span><a href="/tags/app/">app<small>1</small></a></span>
+    
+      <span><a href="/tags/data-mining/">data mining<small>1</small></a></span>
+    
+      <span><a href="/tags/iOS-Http-JSON/">iOS Http JSON<small>1</small></a></span>
+    
+      <span><a href="/tags/工作/">工作<small>1</small></a></span>
+    
+  </div>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div id="foot-nav">
+  <ul class="social">
+    
+      <li><a class="github" href="https://github.com/qiaoyu314" title="github">github</a></li>
+    
+      <li><a class="weibo" href="http://weibo.com/vinkyqy" title="weibo">weibo</a></li>
+    
+  </ul>
+</div>
+<div>
+  
+    &copy; 2015 Yu Qiao
+  
+</div>
+<div class="clearfix"></div></footer>
+  
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<script type="text/javascript">
+  function navbar() {
+    var top = $('#nav-top').innerHeight();
+    $('#header').css('min-height', top);
+  }
+  navbar();
+  $(window).resize(navbar);
+</script>
+<div id="totop" class="footer-btn">
+  <a title="Return to Top"><img src="/img/scrollup.png"/></a>
+</div>
+
+<script type="text/javascript">
+  $(function(){ 
+	// When to show the scroll link
+	// higher number = scroll link appears further down the page   
+	var upperLimit = 800;
+	
+	// Our scroll link element
+	var scrollElem = $('#totop');
+   
+	// Scroll to top speed
+	var scrollSpeed = 500;
+   
+	// Show and hide the scroll to top link based on scroll position   
+	scrollElem.hide();
+	$(window).scroll(function () {            
+		var scrollTop = $(document).scrollTop();       
+		if ( scrollTop > upperLimit ) {
+		  $(scrollElem).stop().fadeTo(300, 1); // fade back in
+		  $(scrollElem).animate({bottom: "50px"}, { queue: false, duration: 10 });
+		} else {
+		  $(scrollElem).stop().fadeTo(300, 0); // fade out
+	      $(scrollElem).animate({bottom: "-200px"}, { queue: false, duration: 10 });
+			
+		}
+	});
+
+	// Scroll to top animation on click
+	$(scrollElem).click(function(){
+	  $('html, body').animate({scrollTop:0}, scrollSpeed);
+	  $(scrollElem).animate({bottom: "-200px"}, { queue: false, duration: 10 });
+	  return false;
+	});
+  });
+</script>
+</body>
+</html>
