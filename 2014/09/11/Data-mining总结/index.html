@@ -127,20 +127,9 @@
   <h1 class="title">Comments</h1>
 
   
-    <div id="disqus_thread"></div>
-    <script type="text/javascript">
-        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-        var disqus_shortname = 'yuqiao'; // required: replace example with your forum shortname
-
-        /* * * DON'T EDIT BELOW THIS LINE * * */
-        (function() {
-            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-        })();
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
   
 </section>
 
@@ -192,74 +181,18 @@
 </div>
 <div class="clearfix"></div></footer>
   
-  <script type="text/javascript">
+    <script type="text/javascript">
     var disqus_shortname = 'yuqiao';
 
     (function(){
       var dsq = document.createElement('script');
       dsq.type = 'text/javascript';
       dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
-  </script>
+    </script>
 
 
-
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
-<script type="text/javascript">
-(function($){
-  $('.fancybox').fancybox();
-})(jQuery);
-</script>
-
-
-<script type="text/javascript">
-  function navbar() {
-    var top = $('#nav-top').innerHeight();
-    $('#header').css('min-height', top);
-  }
-  navbar();
-  $(window).resize(navbar);
-</script>
-<div id="totop" class="footer-btn">
-  <a title="Return to Top"><img src="/img/scrollup.png"/></a>
-</div>
-
-<script type="text/javascript">
-  $(function(){ 
-	// When to show the scroll link
-	// higher number = scroll link appears further down the page   
-	var upperLimit = 800;
-	
-	// Our scroll link element
-	var scrollElem = $('#totop');
-   
-	// Scroll to top speed
-	var scrollSpeed = 500;
-   
-	// Show and hide the scroll to top link based on scroll position   
-	scrollElem.hide();
-	$(window).scroll(function () {            
-		var scrollTop = $(document).scrollTop();       
-		if ( scrollTop > upperLimit ) {
-		  $(scrollElem).stop().fadeTo(300, 1); // fade back in
-		  $(scrollElem).animate({bottom: "50px"}, { queue: false, duration: 10 });
-		} else {
-		  $(scrollElem).stop().fadeTo(300, 0); // fade out
-	      $(scrollElem).animate({bottom: "-200px"}, { queue: false, duration: 10 });
-			
-		}
-	});
-
-	// Scroll to top animation on click
-	$(scrollElem).click(function(){
-	  $('html, body').animate({scrollTop:0}, scrollSpeed);
-	  $(scrollElem).animate({bottom: "-200px"}, { queue: false, duration: 10 });
-	  return false;
-	});
-  });
-</script>
 </body>
 </html>
